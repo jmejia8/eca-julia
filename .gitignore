@@ -1,0 +1,4 @@
+tmp/
+input_data/
+*.so
+*.o

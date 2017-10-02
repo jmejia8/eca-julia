@@ -21,11 +21,11 @@ function testFunc(x, f, func_num)
 end
 
 function runn(func_num)
-    D = 30
+    D = 100
     K = 7
     limits = (-100.0, 100.0)
     η_max  = 2
-    N  = K*10# K * D
+    N  = K * div(D, 2)  # K * D
     
     max_iter = div( 1 + 10000D, N)
 

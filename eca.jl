@@ -68,29 +68,34 @@ function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 10
         
         for i in 1:N
             x = population[i, :]
-            η = η_max * rand()
-            
+
             popSample = rand(1:N, K)
             subpopulation = population[popSample, :]
-            c = center(subpopulation, fitness[popSample])
-            r = population[rand(popSample, 1)[1], :]
+            for qq = 1:5
 
-            h = x + η * (c - r)
-            h = correct(h, limits)
+                η = η_max * rand()
+                
+                c = center(subpopulation, fitness[popSample])
+                r = population[rand(popSample, 1)[1], :]
 
-            for k in 1:D
-                if rand() < 0.1
-                    h[k] = x[k]
+                h = x + η * (c - r)
+                h = correct(h, limits)
+
+                for k in 1:D
+                    if rand() < 0.1
+                        h[k] = x[k]
+                    end
                 end
-            end
 
-            f_h = [0.0]
-            func(h, f_h, func_num)
-            f_h = f_h[1]
+                f_h = [0.0]
+                func(h, f_h, func_num)
+                f_h = f_h[1]
 
-            if f_h < fitness[i]
-                push!(H,   h)
-                push!(f_H, f_h) 
+                if f_h < fitness[i]
+                    push!(H,   h)
+                    push!(f_H, f_h) 
+                    break
+                end
             end
         end
 

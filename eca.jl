@@ -1,3 +1,5 @@
+include("plotAnalysis.jl")
+
 function center(neigbors, fitness)
     n, d = size(neigbors, 1, 2)
     c = zeros(Float64, d)
@@ -56,7 +58,8 @@ function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 10
     qq = linspace(a,b, 50)
 
     tt = 0
-    for t = 1:max_iter
+    a = @animate for t = 1:max_iter
+        plotPopulation(population)
         best = minimum(fitness)
        
         if abs(f_real -best) < 1e-9
@@ -71,7 +74,7 @@ function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 10
 
             popSample = rand(1:N, K)
             subpopulation = population[popSample, :]
-            for qq = 1:5
+            for qq = 1:1
 
                 η = η_max * rand()
                 
@@ -103,6 +106,8 @@ function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 10
         # println("hijos = ", length(H))
         replaceWrost!(population, fitness, H, f_H)
     end
+
+    gif(a, "fig$func_num.gif", fps = 5)
 
     println("=============================")
     println("| Generations = $tt")

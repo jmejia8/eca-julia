@@ -21,11 +21,12 @@ function testFunc(x, f, func_num)
 end
 
 function runn(func_num)
-    D = 100
+    println("func = $func_num")
+    D = 30
     K = 7
     limits = (-100.0, 100.0)
     η_max  = 2
-    N  = K * div(D, 2)  # K * D
+    N  = K * 10 #div(D, 2)  # K * D
     
     max_iter = div( 1 + 10000D, N)
 
@@ -33,14 +34,15 @@ function runn(func_num)
 
     ff = [0.0]
     testFunc(approx, ff, func_num)
-    # println("x = $approx \n\n")
+    println("x = $approx \n\n")
     @printf "Error: %e \n=============================\n\n" ( ff[1] - func_num*100)
     # println("f = ", ff[1])
 end
 
 function main()
-    func_num = 1
-    for i = 1:30
+    func_num = 2
+    for i = 3:30
+        func_num = i
         println("run $i")
         runn(i)
     end

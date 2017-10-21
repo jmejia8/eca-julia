@@ -16,7 +16,7 @@ function center(neigbors, fitness)
     return c / sum(fitness)
 end
 
-function replaceWrost!(population, fitness, H, f_H)
+function replaceWorst!(population, fitness, H, f_H)
     f_wrost = sort(fitness, rev=true)
 
     l = 1
@@ -43,7 +43,7 @@ function correct(h, limits)
             end , h)
 end
 
-function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 100.), func_num = 1)
+function eca(func, D, N, max_evals = 70, K = 7, η_max = 2.0, limits = (-100., 100.), func_num = 1)
     a, b = limits
     f_real = 100 * func_num
 
@@ -53,25 +53,28 @@ function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 10
 
     # population, fitness
     N, D = size(population, 1, 2)
-    qq = linspace(a,b, 50)
 
-    tt = 0
-    for t = 1:max_iter
-        best = minimum(fitness)
-       
-        if abs(f_real -best) < 1e-9
-            break
-        end
+    # current evalutations
+    nevals = N
+
+    # stop condition
+    stop   = false
+
+    # current iteration
+    t      = 0
+
+    # start search
+    while !stop
 
         H   = []
         f_H = Float64.([])
         
-        for i in 1:N
+        for i in 1:N            
             x = population[i, :]
 
             popSample = rand(1:N, K)
             subpopulation = population[popSample, :]
-            for qq = 1:5
+            for qq = 1:1
 
                 η = η_max * rand()
                 
@@ -81,15 +84,16 @@ function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 10
                 h = x + η * (c - r)
                 h = correct(h, limits)
 
-                for k in 1:D
-                    if rand() < 0.1
-                        h[k] = x[k]
-                    end
-                end
+                # for k in 1:D
+                #     if rand() < 0.1
+                #         h[k] = x[k]
+                #     end
+                # end
 
                 f_h = [0.0]
                 func(h, f_h, func_num)
                 f_h = f_h[1]
+                nevals += 1
 
                 if f_h < fitness[i]
                     push!(H,   h)
@@ -99,14 +103,17 @@ function eca(func, D, N, max_iter = 70, K = 7, η_max = 2.0, limits = (-100., 10
             end
         end
 
-        tt = t
-        # println("hijos = ", length(H))
-        replaceWrost!(population, fitness, H, f_H)
+        t += 1
+
+        replaceWorst!(population, fitness, H, f_H)
+        
+        best = minimum(fitness)
+        stop = abs(f_real -best) < 1e-8 || nevals >= max_evals
     end
 
     println("=============================")
-    println("| Generations = $tt")
-    println("| Evals       = ", N*tt)
+    println("| Generations = $t")
+    println("| Evals       = ", nevals)
     println("=============================")
     f_best = minimum(fitness)
     return population[find(x->x == f_best, fitness)[1], :]

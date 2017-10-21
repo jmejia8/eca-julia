@@ -21,15 +21,15 @@ function testFunc(x, f, func_num)
 end
 
 function runn(func_num)
-    D = 100
+    D = 10
     K = 7
     limits = (-100.0, 100.0)
     η_max  = 2
-    N  = K * div(D, 2)  # K * D
+    N  = K * D
     
-    max_iter = div( 1 + 10000D, N)
+    max_evals = 10000D
 
-    approx = eca(testFunc, D, N, max_iter,  K, η_max, limits, func_num)
+    approx = eca(testFunc, D, N, max_evals,  K, η_max, limits, func_num)
 
     ff = [0.0]
     testFunc(approx, ff, func_num)
@@ -39,7 +39,7 @@ function runn(func_num)
 end
 
 function main()
-    func_num = 1
+    func_num = 3
     for i = 1:30
         println("run $i")
         runn(i)

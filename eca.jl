@@ -51,17 +51,14 @@ function eca(func, D, N, max_evals = 70, K = 7, η_max = 2.0, limits = (-100., 1
     fitness = zeros(N)
     func(population, fitness, func_num)
 
-    # population, fitness
-    N, D = size(population, 1, 2)
-
     # current evalutations
     nevals = N
 
     # stop condition
-    stop   = false
+    stop = false
 
     # current iteration
-    t      = 0
+    t = 0
 
     # start search
     while !stop

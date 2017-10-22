@@ -1,3 +1,5 @@
+include("plotAnalysis.jl")
+
 function center(neigbors, fitness)
     n, d = size(neigbors, 1, 2)
     c = zeros(Float64, d)
@@ -62,6 +64,12 @@ function eca(func, D, N, max_evals = 70, K = 7, η_max = 2.0, limits = (-100., 1
 
     # start search
     while !stop
+    # plot()
+    # a = @animate for gg =1:10000
+    #     if stop
+    #         break
+    #     end
+    #     plotPopulation(population, gg)
 
         H   = []
         f_H = Float64.([])
@@ -107,6 +115,8 @@ function eca(func, D, N, max_evals = 70, K = 7, η_max = 2.0, limits = (-100., 1
         best = minimum(fitness)
         stop = abs(f_real -best) < 1e-8 || nevals >= max_evals
     end
+
+    # gif(a, "fig$func_num.gif", fps = 5)
 
     println("=============================")
     println("| Generations = $t")

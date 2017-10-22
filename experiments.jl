@@ -21,11 +21,11 @@ function testFunc(x, f, func_num)
 end
 
 function runn(func_num)
-    D = 10
+    D = 2
     K = 7
     limits = (-100.0, 100.0)
     η_max  = 2
-    N  = K * D
+    N  = K * 10# D
     
     max_evals = 10000D
 
@@ -40,7 +40,7 @@ end
 
 function main()
     func_num = 3
-    for i = 1:30
+    for i = 21:28
         println("run $i")
         runn(i)
     end
